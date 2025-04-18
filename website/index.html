@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowy.ai</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="snow-container"></div>
+    
+    <header>
+        <div class="logo">
+            <img src="logo snowy.png" alt="Snowy.ai Logo">
+        </div>
+    </header>
+
+    <main>
+        <div class="center-content">
+            <img src="logo snowy.png" alt="Snowy.ai Logo" class="jumping-logo">
+            <h1>snowy.ai</h1>
+            <p class="subtitle">A powerful discord bot maker with no code powered by <a href="https://discord.gg/swoosh" target="_blank">.gg/swoosh</a></p>
+            <div class="button-container">
+                <a href="https://discord.gg/swoosh" target="_blank" class="cta-button">Join Support Server</a>
+                <a href="login.html" class="cta-button">Make Yours Now</a>
+                <a href="" id="bot-invite-link" target="_blank" class="cta-button">Invite Our Bot</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load bot invite URL from environment
+        fetch('/.env')
+            .then(response => response.text())
+            .then(text => {
+                const envVars = text.split('\n').reduce((acc, line) => {
+                    const [key, value] = line.split('=');
+                    if (key && value) {
+                        acc[key.trim()] = value.trim();
+                    }
+                    return acc;
+                }, {});
+                
+                document.getElementById('bot-invite-link').href = envVars.BOT_INVITE_URL;
+            })
+            .catch(error => console.error('Error loading environment variables:', error));
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 

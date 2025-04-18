@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration - Snowy.ai</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="snow-container"></div>
+    
+    <header>
+        <div class="logo">
+            <img src="logo snowy.png" alt="Snowy.ai Logo">
+        </div>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <img src="logo snowy.png" alt="Snowy.ai Logo" class="login-logo">
+            <h2>Test Registration</h2>
+            <form class="login-form" id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="cta-button login-btn">Register</button>
+                <div id="message" class="message"></div>
+            </form>
+            <div class="login-footer">
+                <p class="signup-text">Already have an account? <a href="login.html" class="signup-link">Login</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = 'Registration successful! Check your email for verification.';
+                    
+                    // Redirect to login page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = data.error || 'Registration failed';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'An error occurred during registration';
+            }
+        }
+    </script>
+</body>
+</html> 

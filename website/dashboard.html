@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Snowy.ai</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="logo snowy.png" alt="Snowy.ai Logo">
+            </div>
+            <div class="user-menu">
+                <span id="username-display"></span>
+                <button id="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="dashboard-container">
+                <div class="welcome-section">
+                    <h1>Welcome to Snowy.ai</h1>
+                    <p class="welcome-message">Hi <span id="welcome-username"></span>! Your account is now verified and ready to use.</p>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Assistant</h3>
+                        <p>Your personal AI assistant is ready to help</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>Settings</h3>
+                        <p>Customize your experience</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Analytics</h3>
+                        <p>Track your usage and progress</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check session on page load
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/check-session', {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                const data = await response.json();
+                if (data.user) {
+                    // Update UI with user info
+                    document.getElementById('username-display').textContent = data.user.username;
+                    document.getElementById('welcome-username').textContent = data.user.username;
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        // Check session when page loads
+        document.addEventListener('DOMContentLoaded', checkSession);
+
+        // Handle logout
+        document.getElementById('logout-button').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+    </script>
+</body>
+</html> 
