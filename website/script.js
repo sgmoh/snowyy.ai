@@ -1,48 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Snow animation
+function createSnow() {
     const snowContainer = document.querySelector('.snow-container');
-    
-    function createSnowflake() {
+    const snowflakeCount = 100; // Increased number of snowflakes
+
+    for (let i = 0; i < snowflakeCount; i++) {
         const snowflake = document.createElement('div');
-        snowflake.className = 'snowflake';
+        snowflake.classList.add('snow');
         
-        // Random size between 2 and 4 pixels for thinner snow
-        const size = Math.random() * 2 + 2;
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
         snowflake.style.width = `${size}px`;
         snowflake.style.height = `${size}px`;
         
-        // Random position across the entire width
+        // Random position
         snowflake.style.left = `${Math.random() * 100}%`;
         
-        // Random starting position from top (some start below the top)
-        snowflake.style.top = `${Math.random() * -15}%`;
-        
-        // Random animation duration between 3 and 8 seconds for faster falling
-        const duration = Math.random() * 5 + 3;
+        // Random animation duration between 5s and 15s
+        const duration = Math.random() * 10 + 5;
         snowflake.style.animationDuration = `${duration}s`;
         
-        // Random delay for more natural appearance
-        snowflake.style.animationDelay = `${Math.random() * 2}s`;
-        
-        // Random opacity for depth effect
-        snowflake.style.opacity = Math.random() * 0.5 + 0.1;
+        // Random delay
+        snowflake.style.animationDelay = `${Math.random() * 5}s`;
         
         snowContainer.appendChild(snowflake);
-        
-        // Remove snowflake after animation completes
-        setTimeout(() => {
-            snowflake.remove();
-        }, duration * 1000);
     }
-    
-    // Create more initial snowflakes
-    for (let i = 0; i < 250; i++) {
-        createSnowflake();
-    }
-    
-    // Create multiple snowflakes per interval
-    setInterval(() => {
-        for (let i = 0; i < 3; i++) {
-            createSnowflake();
-        }
-    }, 50);
-}); 
+}
+
+// Create snow when the page loads
+window.addEventListener('load', createSnow); 

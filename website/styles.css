@@ -22,22 +22,24 @@ body {
     z-index: 1;
 }
 
-.snowflake {
+.snow {
     position: absolute;
     width: 10px;
     height: 10px;
     background: white;
     border-radius: 50%;
-    opacity: 0.8;
+    filter: blur(1px);
     animation: fall linear infinite;
 }
 
 @keyframes fall {
     0% {
-        transform: translateY(-100vh) rotate(0deg);
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
     }
     100% {
         transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
     }
 }
 
@@ -115,9 +117,11 @@ header {
 }
 
 .logo-text {
-    font-size: 1.5rem;
+    font-size: 24px;
     font-weight: bold;
-    transition: color 0.3s ease;
+    color: #fff;
+    margin-left: 10px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 main {
