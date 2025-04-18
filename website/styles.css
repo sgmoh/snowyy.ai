@@ -5,11 +5,13 @@
 }
 
 body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
     background-color: #000;
     color: #fff;
-    font-family: Arial, sans-serif;
-    overflow-x: hidden;
     min-height: 100vh;
+    cursor: url('./cursor.png') 0 0, auto;
 }
 
 .snow-container {
@@ -24,17 +26,16 @@ body {
 
 .snow {
     position: absolute;
-    width: 10px;
-    height: 10px;
     background: white;
     border-radius: 50%;
-    filter: blur(1px);
+    filter: blur(0.5px) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
     animation: fall linear infinite;
+    pointer-events: none;
 }
 
 @keyframes fall {
     0% {
-        transform: translateY(-10px) rotate(0deg);
+        transform: translateY(-100%) rotate(0deg);
         opacity: 1;
     }
     100% {
@@ -196,6 +197,10 @@ h1 {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.cta-button, a {
+    cursor: url('./cursor.png') 0 0, pointer;
 }
 
 .cta-button {

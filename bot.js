@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const express = require('express');
 const path = require('path');
+const apiRouter = require('./routes/api');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -15,13 +16,40 @@ const client = new Client({
     ]
 });
 
+// Middleware setup
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Security headers
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Content-Security-Policy', "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data: https:;");
+    next();
+});
+
+// Debug middleware - log all requests
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log('Request body:', req.body);
+    next();
+});
+
 // Serve static files from the website directory
 app.use(express.static(path.join(__dirname, 'website')));
 
-// API endpoint for bot invite URL
-app.get('/api/bot-invite', (req, res) => {
+// Mount API routes
+app.use('/api', apiRouter);
+
+// Status endpoint
+app.get('/status', (req, res) => {
     res.json({
-        inviteUrl: process.env.BOT_INVITE_URL
+        status: 'online',
+        uptime: process.uptime(),
+        botStatus: client.readyAt ? 'connected' : 'disconnected',
+        databaseStatus: 'connected'
     });
 });
 
@@ -30,17 +58,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'website', 'index.html'));
 });
 
-// Uptime monitoring endpoint
-app.get('/status', (req, res) => {
-    res.json({
-        status: 'online',
-        uptime: process.uptime(),
-        botStatus: client.readyAt ? 'connected' : 'disconnected'
-    });
-});
-
 // Start the HTTP server
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`🌐 HTTP server running on port ${port}`);
     console.log(`🌐 Website available at http://localhost:${port}`);
 });
@@ -48,8 +67,6 @@ app.listen(port, () => {
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
     console.log(`🌨️ ${client.user.tag} is online and ready!`);
-    
-    // Set the bot's activity with the correct ActivityType
     client.user.setActivity('snowy.ai', { type: ActivityType.Watching });
 });
 
