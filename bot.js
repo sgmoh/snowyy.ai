@@ -18,6 +18,13 @@ const client = new Client({
 // Serve static files from the website directory
 app.use(express.static(path.join(__dirname, 'website')));
 
+// API endpoint for bot invite URL
+app.get('/api/bot-invite', (req, res) => {
+    res.json({
+        inviteUrl: process.env.BOT_INVITE_URL
+    });
+});
+
 // Serve the main website
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'website', 'index.html'));

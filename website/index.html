@@ -23,28 +23,11 @@
             <div class="button-container">
                 <a href="https://discord.gg/swoosh" target="_blank" class="cta-button">Join Support Server</a>
                 <a href="login.html" class="cta-button">Make Yours Now</a>
-                <a href="" id="bot-invite-link" target="_blank" class="cta-button">Invite Our Bot</a>
+                <a href="https://discord.com/api/oauth2/authorize?client_id=1362352960511803592&permissions=8&scope=bot%20applications.commands" target="_blank" class="cta-button">Invite Our Bot</a>
             </div>
         </div>
     </main>
 
-    <script>
-        // Load bot invite URL from environment
-        fetch('/.env')
-            .then(response => response.text())
-            .then(text => {
-                const envVars = text.split('\n').reduce((acc, line) => {
-                    const [key, value] = line.split('=');
-                    if (key && value) {
-                        acc[key.trim()] = value.trim();
-                    }
-                    return acc;
-                }, {});
-                
-                document.getElementById('bot-invite-link').href = envVars.BOT_INVITE_URL;
-            })
-            .catch(error => console.error('Error loading environment variables:', error));
-    </script>
     <script src="script.js"></script>
 </body>
 </html> 
