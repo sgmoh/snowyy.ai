@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -14,9 +15,12 @@ const client = new Client({
     ]
 });
 
-// Create HTTP server for Render
+// Serve static files from the website directory
+app.use(express.static(path.join(__dirname, 'website')));
+
+// Serve the main website
 app.get('/', (req, res) => {
-    res.send('Snowy.ai Discord Bot is running!');
+    res.sendFile(path.join(__dirname, 'website', 'index.html'));
 });
 
 // Uptime monitoring endpoint
@@ -31,6 +35,7 @@ app.get('/status', (req, res) => {
 // Start the HTTP server
 app.listen(port, () => {
     console.log(`🌐 HTTP server running on port ${port}`);
+    console.log(`🌐 Website available at http://localhost:${port}`);
 });
 
 // When the client is ready, run this code (only once)
