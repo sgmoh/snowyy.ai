@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: snowy-ai-bot
+    env: node
+    buildCommand: npm install
+    startCommand: node bot.js
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: APPLICATION_ID
+        sync: false
+      - key: PUBLIC_KEY
+        sync: false
+      - key: PORT
+        value: 3000 

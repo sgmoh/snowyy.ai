@@ -1,5 +1,8 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
 
 // Create a new client instance
 const client = new Client({
@@ -9,6 +12,25 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers,
     ]
+});
+
+// Create HTTP server for Render
+app.get('/', (req, res) => {
+    res.send('Snowy.ai Discord Bot is running!');
+});
+
+// Uptime monitoring endpoint
+app.get('/status', (req, res) => {
+    res.json({
+        status: 'online',
+        uptime: process.uptime(),
+        botStatus: client.readyAt ? 'connected' : 'disconnected'
+    });
+});
+
+// Start the HTTP server
+app.listen(port, () => {
+    console.log(`🌐 HTTP server running on port ${port}`);
 });
 
 // When the client is ready, run this code (only once)
